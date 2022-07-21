@@ -1,5 +1,9 @@
 const { SlashCommandBuilder } = require('@discordjs/builders')
 
+/**
+ * @description Example slash command of getting different information about a server
+ */
+
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('server')

@@ -1,5 +1,9 @@
 const { SlashCommandBuilder } = require('@discordjs/builders')
 
+/**
+ * @description Generic Slash Command, kind of the "Hello World" of Discord Bots
+ */
+
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('ping')

@@ -1,5 +1,10 @@
 const { SlashCommandBuilder } = require('@discordjs/builders')
 
+/**
+ * @description Slash Command to test creating a Lead in Salesforce and getting
+ * all of the data for the once it has been created in Salesforce
+ */
+
 module.exports = {
     data : new SlashCommandBuilder()
         .setName('leadtest')

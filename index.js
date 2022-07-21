@@ -1,12 +1,10 @@
 const fs = require('node:fs')
 const path = require('node:path')
-
-// Require the necessary parts for running the client
 const { Client, Collection, Intents } = require('discord.js')
 const { token, sfConsumerKey, sfConsumerSecret, sfUserName, sfPassword, sfSecurityToken } = require('./config.json')
 
 // Create the client instance
-const client = new Client({ intents : [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES ] })
+const client = new Client({ intents : [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] })
 
 // Add the commands to the client
 client.commands = new Collection()
@@ -34,7 +32,6 @@ for(const file of eventFiles) {
 }
 
 // get salesforce access token
-
 fetch('https://login.salesforce.com/services/oauth2/token', {
     method  : 'POST',
     headers : {

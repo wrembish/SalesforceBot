@@ -7,8 +7,6 @@ module.exports = {
 
         const content = message.content
 
-        if(content === '!!ping') await message.channel.send('Pong!')
-
         if(content.startsWith('#')) {
             if(content.split(' ').length <= 1 && content.split('#').length > 1) {
                 const dieCountName = content.split('#')[1];
@@ -63,6 +61,8 @@ module.exports = {
 
                 await message.channel.send(reply)
             }
+
+            // if(content === '!!ping') await message.channel.send('Pong!')
         }
     },
 }
