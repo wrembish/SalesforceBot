@@ -1,9 +1,7 @@
-const { clientId } = require('../config.json')
-
 module.exports = {
     name : 'messageCreate',
     async execute(message) {
-        if(message.author.id === clientId) return
+        if(message.author.id === message.client.user.id) return
 
         const content = message.content
 
