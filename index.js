@@ -45,7 +45,7 @@ fetch('https://login.salesforce.com/services/oauth2/token', {
         `&password=${process.env.SF_PASSWORD}${process.env.SF_SECURITY_TOKEN}`
 })  .then(response => response.json())
     .then(data => {
-        console.log('success', data)
+        console.log('Successfully Connected to Salesforce!')
         client.sf = data
     })
     .catch((error) => {
