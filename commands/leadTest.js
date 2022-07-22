@@ -40,6 +40,10 @@ module.exports = {
                 reply += `Lead Name : ${resultGet.Name}`
             }
         }
+
+        let success = await helpers.delete('Lead', id, sf)
+        if(success) reply += '\n\nSuccessfully Deleted Lead'
+        else reply += '\n\n Lead Deletion Failed'
         
         await interaction.reply(reply)
         interaction.client.leadNum++

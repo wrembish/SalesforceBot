@@ -47,7 +47,25 @@ module.exports = {
                 'Authorization' : `${sf.token_type} ${sf.access_token}`
             },
             body    : JSON.stringify(body)
-        })  .then(response => response)
+        })  .then(async (data) => {
+                console.log('success')
+                result = data
+            })
+            .catch((error) => {
+                console.log('Error: ', error)
+            })
+        return result
+    },
+    async upsert(object, externalIdFieldName, externalId, body, sf) {
+        let result
+        await fetch(`${sf.instance_url}/services/data/v54.0/sobjects/${object}/${externalIdFieldName}/${externalId}`, {
+            method  : 'PATCH',
+            headers : {
+                'Content-Type'  : 'application/json',
+                'Authorization' : `${sf.token_type} ${sf.access_token}`
+            },
+            body    : JSON.stringify(body)
+        })  .then(response => response.json())
             .then(async (data) => {
                 console.log('success')
                 result = data
@@ -56,6 +74,22 @@ module.exports = {
                 console.log('Error: ', error)
             })
         return result
+    },
+    async delete(object, id, sf) {
+        let response = false
+        await fetch(`${sf.instance_url}/services/data/v54.0/sobjects/${object}/${id}`, {
+            method  : 'DELETE',
+            headers : {
+                'Authorization' : `${sf.token_type} ${sf.access_token}`
+            }
+        })  .then(async () => {
+                console.log('success')
+                response = true
+            })
+            .catch((error) => {
+                console.log('Error: ', error)
+            })
+        return response
     },
     async getRecordById(object, id, sf) {
         let result
