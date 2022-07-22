@@ -14,3 +14,9 @@ creating a discord bot with Salesforce connection to store data
 * SF_USERNAME="SF ACCOUNT TO LOG IN WITH Username GOES HERE"
 * SF_PASSWORD="PASSWORD FOR ABOVE ACCOUNT GOES HERE"
 * SF_SECURITY_TOKEN="SECURITY TOKEN FOR ABOVE ACCOUNT GOES HERE"
+
+## How To Run
+* First create the Environment Variables from above.
+  * CLIENT_ID and GUILD_ID are important if you want to run slash commands on a discord server
+* Run `node deploy-commands.js` once the Environment Variables are set to deploy slash commands to your server
+* Run `node index.js` to run the bot
