@@ -9,10 +9,7 @@ module.exports = {
             }
         })  .then(response => response.json())
             .then(async(data) => {
-                console.log('success')
-                if(data.totalSize > 0) {
-                    records = data.records
-                }
+                records = data
             })
             .catch((error) => {
                 console.log('Error: ', error)
@@ -30,7 +27,6 @@ module.exports = {
             body    : JSON.stringify(body)
         })  .then(response => response.json())
             .then(async (data) => {
-                console.log('success')
                 result = data
             })
             .catch((error) => {
@@ -48,7 +44,6 @@ module.exports = {
             },
             body    : JSON.stringify(body)
         })  .then(async (data) => {
-                console.log('success')
                 result = data
             })
             .catch((error) => {
@@ -67,7 +62,6 @@ module.exports = {
             body    : JSON.stringify(body)
         })  .then(response => response.json())
             .then(async (data) => {
-                console.log('success')
                 result = data
             })
             .catch((error) => {
@@ -83,7 +77,6 @@ module.exports = {
                 'Authorization' : `${sf.token_type} ${sf.access_token}`
             }
         })  .then(async () => {
-                console.log('success')
                 response = true
             })
             .catch((error) => {
@@ -101,7 +94,6 @@ module.exports = {
             }
         })  .then(response => response.json())
             .then(async(data) => {
-                console.log('success')
                 result = data
             })
             .catch((error) => {
@@ -113,8 +105,8 @@ module.exports = {
         const queryStr = `SELECT+Id,Name,Char__c+from+Emoji__c`
         let records = await this.soql(queryStr, sf)
         let map = {}
-        if(records) {
-            records.forEach((record) => {
+        if(records.totalSize > 0) {
+            records.records.forEach((record) => {
                 const key = record.Char__c.toUpperCase()
                 if(map[key]) {
                     map[key].push(record.Name)

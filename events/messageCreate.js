@@ -11,7 +11,7 @@ module.exports = {
         let records = await helpers.soql(queryStr, sf)
         const currGuildId = message.guild.id
         let isIn = false
-        if(records) { records.forEach((record) => { if(record.Name === currGuildId) isIn = true; }) }
+        if(records.totalSize >= 0) { records.records.forEach((record) => { if(record.Name === currGuildId) isIn = true; }) }
         if(!isIn) {
             const body = {
                 "Name" : currGuildId
@@ -29,26 +29,19 @@ module.exports = {
                 records = await helpers.soql(queryStr, sf)
 
                 let reply = ''
+                let body = {
+                    'Name'  : dieCountName
+                }
                 if(records.totalSize <= 0) {
                     reply += `Congrats ${dieCountName} you now have 1 :electric_plug: Disconnet :electric_plug:`
-
-                    const body = {
-                        "Name"      : dieCountName,
-                        "Count__c"  : 1
-                    }
-
-                    helpers.insert('Die_Count__c', body, sf)
+                    body.Count__c = 1
                 } else {
-                    const record = records[0]
-                    record.Count__c += 1
-                    reply += `Current Toll for ${record.Name}: ${record.Count__c}`
-
-                    const body = {
-                        "Count__c" : record.Count__c
-                    }
-
-                    helpers.update('DieCount__c', record.Id, body, sf)
+                    const count = records.records[0].Count__c+1
+                    reply += `Current Toll for ${dieCountName}: ${count}`
+                    body.Count__c = count
                 }
+
+                await helpers.upsert('DieCount__c', 'Ext_Id__c', dieCountName, body, sf)
 
                 await message.channel.send(reply)
             } else if(content.split(' ').length === 2 && content.split(COMMAND_CHAR).length > 1) {

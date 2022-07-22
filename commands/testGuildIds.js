@@ -13,9 +13,9 @@ module.exports = {
         const queryStr = `SELECT+Id,Name+from+GuildId__c`
         let records = await helpers.soql(queryStr, interaction.client.sf)
         // await interaction.reply('')
-        if(records) {
+        if(records.totalSize > 0) {
             let reply = ''
-            records.forEach((record) => { reply += record.Name + '\n' })
+            records.records.forEach((record) => { reply += record.Name + '\n' })
             await interaction.reply(reply)
         } else {
             await interaction.reply('No Records To Display')
