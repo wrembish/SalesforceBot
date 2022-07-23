@@ -108,5 +108,5 @@ package-lock.json
 
 # My Test Files
 **/emptyComm.js
-**/*test*
-**/*Test*
+**/test*
+**/*Test.js
