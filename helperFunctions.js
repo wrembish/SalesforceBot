@@ -119,7 +119,6 @@ module.exports = {
         return map
     },
     async convert(str, client) {
-        // console.log(await helpers.convert('hello world', interaction.client))
         let output = {
             update_map : false,
             map : {},

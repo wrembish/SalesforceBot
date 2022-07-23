@@ -1,7 +1,7 @@
 const { SlashCommandBuilder } = require('@discordjs/builders')
 
 /**
- * @description 
+ * @description Test command to test the upsert helper function
  */
 
 module.exports = {
@@ -12,19 +12,12 @@ module.exports = {
         const helpers = require('../helperFunctions.js')
         const sf = interaction.client.sf
 
-        let body = {
-            'Name'  : 'This was inserted'
-        }
-
-        let result = await helpers.upsert('upsertTest__c', 'Ext_Id__c', 'insertTest', body, sf)
-        console.log(result)
-
-        body = {
-            'Name'  : 'This was updated'
-        }
+        const insertResult = await helpers.upsert('upsertTest__c', 'Ext_Id__c', 'insertTest', { Name  : 'This was inserted' }, sf)
+        console.log(insertResult)
+        console.log(await helpers.upsert('upsertTest__c', 'Ext_Id__c', 'updateTest', { Name  : 'This was updated' }, sf))
         
-        result = await helpers.upsert('upsertTest__c', 'Ext_Id__c', 'updateTest', body, sf)
-        console.log(result)
+        await helpers.delete('upsertTest__c', insertResult.id, sf)
+        
         await interaction.reply('success')
     },
 }
