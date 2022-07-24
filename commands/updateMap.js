@@ -12,7 +12,7 @@ module.exports = {
         const helpers = require('../helperFunctions.js')
 
         const testAuth = await helpers.testAuth(interaction.client.sf)
-        if(testAuth) {  interaction.client.sf = await helpers.auth() }
+        if(testAuth) { interaction.client.sf = await helpers.auth() }
 
         interaction.client.conversionMap = await helpers.getMap(interaction.client.sf)
         await interaction.reply('We Did It Boys')

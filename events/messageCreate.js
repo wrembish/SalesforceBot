@@ -9,7 +9,7 @@ module.exports = {
         let testAuth = await helpers.testAuth(message.client.sf)
 
         if(!message.client.guildIds) {
-            if(testAuth) message.client.guildsIds = await helpers.auth()
+            if(testAuth) message.client.sf = await helpers.auth()
 
             let guildIds = await helpers.soql(`SELECT+Id,Name+from+GuildId__c`, message.client.sf)
             message.client.guildIds = guildIds.records.map(value => { return value.Name })
@@ -18,7 +18,7 @@ module.exports = {
         const currGuildId = message.guildId
         if(message.client.guildIds && !message.client.guildIds.includes(currGuildId)) {
             testAuth = await helpers.testAuth(message.client.sf)
-            if(testAuth) message.client.guildsIds = await helpers.auth()
+            if(testAuth) message.client.sf = await helpers.auth()
             
             await helpers.insert('GuildId__c', { Name : currGuildId }, message.client.sf)
             message.client.guildIds.push(currGuildId)
@@ -31,7 +31,7 @@ module.exports = {
         if(content.startsWith(COMMAND_CHAR) && content !== COMMAND_CHAR) {
             if(content.split(' ').length === 1 && content.length > 2) {
                 testAuth = await helpers.testAuth(message.client.sf)
-                if(testAuth) {  message.client.sf = await helpers.auth() }
+                if(testAuth) {  message.client.sf = await helpers.auth(); sf = message.client.sf }
                 
                 const dieCountName = content.substring(1)
                 const result = await helpers.soql(`SELECT+Id,Name,Count__c+from+DieCount__c+WHERE+Name='${dieCountName}'+LIMIT+1`, sf)
@@ -53,7 +53,7 @@ module.exports = {
             }
         } else if(content.toLowerCase().startsWith('new') && content.includes(':')) {
             testAuth = await helpers.testAuth(message.client.sf)
-            if(testAuth) message.client.guildsIds = await helpers.auth()
+            if(testAuth) { message.client.sf = await helpers.auth(); sf = message.client.sf }
 
             let obj
             if(content.split(':')[0].split(' ').length < 2) {
