@@ -1,4 +1,27 @@
 module.exports = {
+    async auth() {
+        let sf
+        await fetch('https://login.salesforce.com/services/oauth2/token', {
+            method  : 'POST',
+            headers : {
+                'Content-Type' : 'application/x-www-form-urlencoded',
+            },
+            body    :
+                'grant_type=password' +
+                `&client_id=${process.env.SF_CONSUMER_KEY}` +
+                `&client_secret=${process.env.SF_CONSUMER_SECRET}` +
+                `&username=${process.env.SF_USERNAME}` +
+                `&password=${process.env.SF_PASSWORD}${process.env.SF_SECURITY_TOKEN}`
+        })  .then(response => response.json())
+            .then(data => {
+                console.log('Successfully Connected to Salesforce!')
+                sf = data
+            })
+            .catch((error) => {
+                console.log('Error: ', error)
+            })
+        return sf
+    },
     async soql(queryStr, sf) {
         let records
         await fetch(`${sf.instance_url}/services/data/v54.0/query/?q=${queryStr}`, {
@@ -15,6 +38,10 @@ module.exports = {
                 console.log('Error: ', error)
             })
         return records
+    },
+    async testAuth(sf) {
+        let test = await this.soql('SELECT+Id+from+Lead+LIMIT+1', sf)
+        return !test.totalSize
     },
     async insert(object, body, sf) {
         let result

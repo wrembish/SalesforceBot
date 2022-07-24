@@ -34,9 +34,7 @@ for(const file of eventFiles) {
 // get salesforce access token
 fetch('https://login.salesforce.com/services/oauth2/token', {
     method  : 'POST',
-    headers : {
-        'Content-Type' : 'application/x-www-form-urlencoded',
-    },
+    headers : { 'Content-Type' : 'application/x-www-form-urlencoded', },
     body    :
         'grant_type=password' +
         `&client_id=${process.env.SF_CONSUMER_KEY}` +
@@ -44,15 +42,10 @@ fetch('https://login.salesforce.com/services/oauth2/token', {
         `&username=${process.env.SF_USERNAME}` +
         `&password=${process.env.SF_PASSWORD}${process.env.SF_SECURITY_TOKEN}`
 })  .then(response => response.json())
-    .then(data => {
-        console.log('Successfully Connected to Salesforce!')
-        client.sf = data
-    })
-    .catch((error) => {
-        console.log('Error: ', error)
-    })
+    .then(data => { console.log('Successfully Connected to Salesforce!'); client.sf = data })
+    .catch((error) => { console.log('Error: ', error) })
 
-client.leadNum = 0
+client.guildIds
 
 // login to discord with the client token
 client.login(process.env.TOKEN)
