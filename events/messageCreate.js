@@ -30,7 +30,7 @@ module.exports = {
         
         if(content.startsWith(COMMAND_CHAR) && content !== COMMAND_CHAR) {
             if(content.split(' ').length === 1 && content.length > 2) {
-                testAuth = await helpers.testAuth(message.client.sf)
+                testAuth = await helpers.testAuth(sf)
                 if(testAuth) {  message.client.sf = await helpers.auth(); sf = message.client.sf }
                 
                 const dieCountName = content.substring(COMMAND_CHAR.length)
@@ -52,7 +52,7 @@ module.exports = {
                 await message.channel.send(reply)
             }
         } else if(content.toLowerCase().startsWith('new') && content.includes(':')) {
-            testAuth = await helpers.testAuth(message.client.sf)
+            testAuth = await helpers.testAuth(sf)
             if(testAuth) { message.client.sf = await helpers.auth(); sf = message.client.sf }
 
             let obj
@@ -80,6 +80,37 @@ module.exports = {
             })
             const result = await helpers.insert(obj, body, sf)
             await message.channel.send(result.id ? `New ${obj} Id: ${result.id}` : result[0].message)
+        } else if(content.toLowerCase().startsWith('update') && content.includes(':') && content.split(':')[0].trimStart().trimEnd().split(' ').length >= 3) {
+            testAuth = await helpers.testAuth(sf)
+            if(testAuth) { message.client.sf = await helpers.auth(); sf = message.client.sf }
+
+            const obj = content.split(':')[0].trimStart().trimEnd().split(' ')[1].trimStart().trimEnd()
+            const id = content.split(':')[0].trimStart().trimEnd().split(' ')[2].trimStart().trimEnd()
+
+            let body = {}
+            content.split(':')[1].split(',').forEach(val => {
+                if(val.includes('=')) {
+                    const key = val.split('=')[0].trimStart().trimEnd()
+                    const value = val.split('=')[1].trimStart().trimEnd()
+                    if(key.toLowerCase() === 'name' && (obj.toLowerCase() === 'lead' || obj.toLowerCase() === 'contact')) {
+                        if(value.split(' ').length > 1) {
+                            body.FirstName = value.split(' ')[0]
+                            body.LastName = value.split(' ')[1]
+                        } else {
+                            body.LastName = value
+                        }
+                    } else {
+                        body[key] = value
+                    }
+                }
+            })
+            
+            if(Object.keys(body).length > 0) {
+                const result = await helpers.update(obj, id, body, sf)
+                await message.channel.send(result ? `${obj} with ID = ${id} was successfully updated` : 'There was a problem updating the record')
+            } else {
+                await message.channel.send('No fields to update')
+            }
         }
     },
 }
