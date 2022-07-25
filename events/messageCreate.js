@@ -1,4 +1,4 @@
-const COMMAND_CHAR = '#'
+const COMMAND_CHAR = './'
 const helpers = require('../helperFunctions.js')
 
 module.exports = {
@@ -24,7 +24,7 @@ module.exports = {
             message.client.guildIds.push(currGuildId)
         }
 
-        const sf = message.client.sf
+        let sf = message.client.sf
 
         const content = message.content
         
@@ -33,7 +33,7 @@ module.exports = {
                 testAuth = await helpers.testAuth(message.client.sf)
                 if(testAuth) {  message.client.sf = await helpers.auth(); sf = message.client.sf }
                 
-                const dieCountName = content.substring(1)
+                const dieCountName = content.substring(COMMAND_CHAR.length)
                 const result = await helpers.soql(`SELECT+Id,Name,Count__c+from+DieCount__c+WHERE+Name='${dieCountName}'+LIMIT+1`, sf)
 
                 let reply = ''
