@@ -23,7 +23,7 @@ module.exports = {
         return sf
     },
     async soql(queryStr, sf) {
-        let records
+        let result
         await fetch(`${sf.instance_url}/services/data/v54.0/query/?q=${queryStr}`, {
             method : 'GET',
             headers : {
@@ -32,12 +32,12 @@ module.exports = {
             }
         })  .then(response => response.json())
             .then(async(data) => {
-                records = data
+                result = data
             })
             .catch((error) => {
                 console.log('Error: ', error)
             })
-        return records
+        return result
     },
     async testAuth(sf) {
         let test = await this.soql('SELECT+Id+from+Lead+LIMIT+1', sf)
@@ -97,19 +97,19 @@ module.exports = {
         return result
     },
     async delete(object, id, sf) {
-        let response = false
+        let success = false
         await fetch(`${sf.instance_url}/services/data/v54.0/sobjects/${object}/${id}`, {
             method  : 'DELETE',
             headers : {
                 'Authorization' : `${sf.token_type} ${sf.access_token}`
             }
-        })  .then(async () => {
-                response = true
+        })  .then(async (data) => {
+                if(data.statusText === 'No Content') success = true
             })
             .catch((error) => {
                 console.log('Error: ', error)
             })
-        return response
+        return success
     },
     async getRecordById(object, id, sf) {
         let result
@@ -134,7 +134,7 @@ module.exports = {
         let map = {}
         if(records.totalSize > 0) {
             records.records.forEach((record) => {
-                const key = record.Char__c.toUpperCase()
+                const key = record.Char__c
                 if(map[key]) {
                     map[key].push(record.Name)
                 } else {
@@ -149,19 +149,19 @@ module.exports = {
         let output = {
             update_map : false,
             map : {},
-            result : ''
+            message : ''
         }
         if(!client.conversionMap) {
             output.update_map = true
             output.map = await this.getMap(client.sf)
         }
 
-        let map = output.update_map ? output.map : client.conversionMap
+        const map = output.update_map ? output.map : client.conversionMap
 
-        str = str.toUpperCase()
+        str = str.toLowerCase()
         for(const c of str.split('')) {
-            if(c === ' ') output.result += '    '
-            else output.result += map[c][Math.floor(Math.random() * map[c].length)] + ' '
+            if(c === ' ') output.message += '    '
+            else output.message += map[c][Math.floor(Math.random() * map[c].length)] + ' '
         }
 
         return output

@@ -111,6 +111,10 @@ module.exports = {
             } else {
                 await message.channel.send('No fields to update')
             }
+        } else if(content.startsWith('!emoji ')) {
+            const result = await helpers.convert(content.substring(7), message.client)
+            if(result && result.update_map) message.client.conversionMap = result.map
+            if(result && result.message) await message.channel.send(result.message)
         }
     },
 }
